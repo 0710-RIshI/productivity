@@ -1,52 +1,15 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  displayPicture:{
-    type:String,
-    default:""
-  }
-  ,
-  tweets: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'Tweet'
-  }],
-  lists: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'List',
-  }],
-  followers:[{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  }],
-  following:[{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  }],
-  socialMediaLinks: {
-    type: Map,  
-    of: String,
-  },
-  streak: {
-    type: Number,
-    default: 0,
-  },
-  challenge: {
-    type: String,
-    default:''  
-  },
+  username: { type: String, unique: true, required: true },
+  name: { type: String, required: true },
+  password: { type: String, required: true },
+  todayTasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
+  prevTasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
+  projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
+  socialMediaLinks: { type: String },
+  streak: { type: Number, default: 0 },
+  challenge: { type: String },
 });
 
 const User = mongoose.model('User', userSchema);

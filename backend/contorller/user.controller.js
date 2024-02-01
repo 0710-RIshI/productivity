@@ -5,12 +5,13 @@ const userModel=require('../models/user.model')
 const dotenv = require('dotenv');
 dotenv.config();
 const router = express.Router()
+const userAuth=require('../middleware/auth')
 router.post('/signup',async (req,res)=>{
     //get all the user details (done)
     //hash the password (done)
     //store all the details in mongodb(done)
     //if error print the error send it to the user (done)
-    //else create a jwt token and send the token to user
+    //else create a jwt token and send the token to user(done)
     const {username,name,password} = req.body
 
     const hashedPassword =await bcrypt.hash(password,10)
@@ -61,6 +62,20 @@ router.post('/signin',async (req,res)=>{
         res.status(500).send("server error")
         console.log(error)
     }
+})
+
+router.get('/user',userAuth,async(req,res)=>{
+    const token=req.headers.authorization.split(' ');
+    const username=jwt.decode(token[1],process.env.JWT_KEY)
+    try{
+        const user = await userModel.findOne({username:username})
+        res.status(200).send(user)
+    }
+    catch(error){
+        res.status(500).send("server error")
+        console.log(error)
+    }
+
 })
 
 
